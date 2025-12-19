@@ -48,18 +48,21 @@
 <body>
     <!-- <h2>Display Preview</h2> -->
     <div style="width: 30vw; height: 30vh; overflow: hidden; border: 1px solid #ccc; background: black;">
-        <iframe id="scoreboard-preview" src="scoreboard.html" style="width: 100vw; height: 100vh; border: 0; display: block; transform: scale(0.3); transform-origin: 0 0;"></iframe>
+        <iframe id="scoreboard-preview" src="controller_scoreboard.html" style="width: 100vw; height: 100vh; border: 0; display: block; transform: scale(0.3); transform-origin: 0 0;"></iframe>
     </div>
   
     <div class="controls">
         <div class="team">
-            <select id="team1-select" onchange="setTeam('team1')" 
+            <!-- <select id="team1-select" onchange="setTeam('team1')" 
                 style="font-size: 20px; font-weight: bold; padding: 10Aftpx; margin-bottom: 10px; border: 2px solid #ccc; border-radius: 5px; background: white;">
                 <option value="Grizzlies FC" data-color="maroon" selected>Grizzlies FC</option>
                 <option value="Sports Experts" data-color="white">Sports Experts</option>
                 <option value="Good Vibes FC" data-color="blue">Good Vibes FC</option>
                 <option value="Riverdale FC" data-color="green">Riverdale FC</option>
-            </select>
+            </select> -->
+            <!-- <span id="team1-name"></span>
+            <div class="score" id="team1-score">0</div> -->
+            <div class="value"><span id="team1-name">Home Team</span></div>
 
             <div class="value">Score: <span id="team1-score">0</span></div>
             <div class="value">Fouls: <span id="team1-fouls">0</span></div>
@@ -72,12 +75,12 @@
         
         <div class="timer-controls">
             <h2>Timer</h2>
-            <div class="value">Time: <span id="timer">20:00</span></div>
+            <div class="value">Time: <span id="timer">15:00</span></div>
             <div style="margin: 10px 0;">
                 <label for="timer-minutes">Min:</label>
-                <input type="number" id="timer-minutes" value="20" min="0" max="59" style="width: 60px; margin: 0 10px;">
+                <input type="number" id="timer-minutes" value="15" min="0" max="59" style="width: 50px; margin: 0 10px;">
                 <label for="timer-seconds">Sec:</label>
-                <input type="number" id="timer-seconds" value="0" min="0" max="59" style="width: 60px; margin: 0 10px;">
+                <input type="number" id="timer-seconds" value="0" min="0" max="59" style="width: 50px; margin: 0 10px;">
                 <button onclick="setTimerDuration()">Set Duration</button>  
             </div>
             <button id="toggle-timer" onclick="toggleTimer()">Start</button>
@@ -85,13 +88,14 @@
         </div>
 
         <div class="team">
-            <select id="team2-select" onchange="setTeam('team2')" 
+            <!-- <select id="team2-select" onchange="setTeam('team2')" 
             style="font-size: 20px; font-weight: bold; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; border-radius: 5px; background: white;">
                 <option value="Grizzlies FC" data-color="maroon">Grizzlies FC</option>
                 <option value="Sports Experts" data-color="white" selected>Sports Experts</option>
                 <option value="Good Vibes FC" data-color="blue">Good Vibes FC</option>
                 <option value="Riverdale FC" data-color="green">Riverdale FC</option>
-            </select>
+            </select> -->
+            <div class="value"><span id="team2-name">Away Team</span></div>
             <div class="value">Score: <span id="team2-score">0</span></div>
             <div class="value">Fouls: <span id="team2-fouls">0</span></div>
             <button onclick="sendCommand('incScore', 'team2')">+ Score</button>

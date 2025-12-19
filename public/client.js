@@ -15,30 +15,19 @@ let wakeLock = null;
 // used for buttons on controller.html
 function sendCommand(action, team) {
   if (typeof socket !== "undefined" && socket.readyState === WebSocket.OPEN) {
+    // Adjust for switched sides: controller buttons should control the team on that side
+    let actualTeam = team;
+    if (currentState && currentState.sidesSwitched && team) {
+      actualTeam = team === "team1" ? "team2" : "team1";
+    }
+
     socket.send(JSON.stringify({
       type: "command",
       action,
-      team
+      team: actualTeam
     }));
   }
 }
-
-// function sendCommand(action, team) {
-//   if (typeof socket !== "undefined" && socket.readyState === WebSocket.OPEN) {
-
-//     // Adjust for switched sides if applicable
-//     let actualTeam = team;
-//     if (currentState && currentState.sidesSwitched && team) {
-//       actualTeam = team === "team1" ? "team2" : "team1";
-//     }
-
-//     socket.send(JSON.stringify({
-//       type: "command",
-//       action,
-//       team: actualTeam
-//     }));
-//   }
-// }
 
 function setTimerDuration() {
   const minutes = parseInt(document.getElementById('timer-minutes').value) || 0;
@@ -54,29 +43,29 @@ function setTimerDuration() {
   }
 }
 
-function setTeam(team) {
-  const select = document.getElementById(team + '-select');
-  const selectedOption = select.options[select.selectedIndex];
-  const teamName = selectedOption.value;
-  const teamColor = selectedOption.getAttribute('data-color');
+// function setTeam(team) {
+//   const select = document.getElementById(team + '-select');
+//   const selectedOption = select.options[select.selectedIndex];
+//   const teamName = selectedOption.value;
+//   const teamColor = selectedOption.getAttribute('data-color');
   
-  // Map the dropdown to the correct team based on current sides state
-  let actualTeam = team;
-  if (currentState && currentState.sidesSwitched) { // true if on same side?
-    // If sides are switched, map the dropdowns to the opposite teams
-    actualTeam = team === 'team1' ? 'team2' : 'team1';
-  }
+//   // Map the dropdown to the correct team based on current sides state
+//   let actualTeam = team;
+//   if (currentState && currentState.sidesSwitched) { // true if on same side?
+//     // If sides are switched, map the dropdowns to the opposite teams
+//     actualTeam = team === 'team1' ? 'team2' : 'team1';
+//   }
   
-  if (typeof socket !== "undefined" && socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify({
-      type: "command",
-      action: "setTeam",
-      team: actualTeam,
-      teamName: teamName,
-      teamColor: teamColor
-    }));
-  }
-}
+//   if (typeof socket !== "undefined" && socket.readyState === WebSocket.OPEN) {
+//     socket.send(JSON.stringify({
+//       type: "command",
+//       action: "setTeam",
+//       team: actualTeam,
+//       teamName: teamName,
+//       teamColor: teamColor
+//     }));
+//   }
+// }
 
 function toggleTimer() {
   const action = timerRunning ? "stopTimer" : "startTimer";
@@ -144,19 +133,20 @@ function updateLeftTeam(leftTeam){
 
   if (document.getElementById("team1-score")) {
     document.getElementById("team1-score").textContent = leftTeam.score;
-    document.getElementById("team1-score").style.color = leftTeam.color;
+    if (leftTeam.color) {
+      document.getElementById("team1-score").style.color = leftTeam.color;
+    }
   }
 
   if (document.getElementById("team1-fouls")) {
     document.getElementById("team1-fouls").textContent = leftTeam.fouls;
-    document.getElementById("team1-fouls").style.color = leftTeam.color;
+    if (leftTeam.color) {
+      document.getElementById("team1-fouls").style.color = leftTeam.color;
+    }
   }
 
-  // Update dropdown to show current team
-  if (document.getElementById("team1-select")) {
-    const select = document.getElementById("team1-select");
-    select.value = leftTeam.name;
-    select.style.color = leftTeam.color;
+  if (document.getElementById("team1-name")) {
+    document.getElementById("team1-name").textContent = leftTeam.name;
   }
 }
 
@@ -164,19 +154,20 @@ function updateRightTeam(rightTeam){
 
   if (document.getElementById("team2-score")) {
     document.getElementById("team2-score").textContent = rightTeam.score;
-    document.getElementById("team2-score").style.color = rightTeam.color;
+    if (rightTeam.color) {
+      document.getElementById("team2-score").style.color = rightTeam.color;
+    }
   }
 
   if (document.getElementById("team2-fouls")) {
     document.getElementById("team2-fouls").textContent = rightTeam.fouls;
-    document.getElementById("team2-fouls").style.color = rightTeam.color;
+    if (rightTeam.color) {
+      document.getElementById("team2-fouls").style.color = rightTeam.color;
+    }
   }
 
-  // Update dropdown to show current team
-  if (document.getElementById("team2-select")) {
-    const select = document.getElementById("team2-select");
-    select.value = rightTeam.name;
-    select.style.color = rightTeam.color;
+  if (document.getElementById("team2-name")) {
+    document.getElementById("team2-name").textContent = rightTeam.name;
   }
 }
 

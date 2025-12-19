@@ -15,10 +15,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Game state managed on the server
 let gameState = {
-  team1: { score: 0, fouls: 0},
-  team2: { score: 0, fouls: 0},
-//   team2: { score: 0, fouls: 0, name: "Team 2", color: "#0000ff" },
-  timer: { seconds: 1200, running: false, initialSeconds: 1200 }, // 20:00 in seconds
+  // team1: { score: 0, fouls: 0},
+  // team2: { score: 0, fouls: 0},
+  team1: { score: 0, fouls: 0, name: "Home Team"},
+  team2: { score: 0, fouls: 0, name: "Away Team"},
+//   team2: { score: 0, fouls: 0, name: "Home Team", color: "#0000ff" },
+  timer: { seconds: 900, running: false, initialSeconds: 900 }, // 20:00 in seconds
   sidesSwitched: false
 };
 
@@ -80,15 +82,6 @@ wss.on("connection", ws => {
           break;
         case "switchSides":
           gameState.sidesSwitched = !gameState.sidesSwitched;
-          break;
-        case "setTeam":
-          if (msg.team === "team1") {
-            gameState.team1.name = msg.teamName;
-            gameState.team1.color = msg.teamColor;
-          } else if (msg.team === "team2") {
-            gameState.team2.name = msg.teamName;
-            gameState.team2.color = msg.teamColor;
-          }
           break;
       }
 
